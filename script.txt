@@ -1,0 +1,44 @@
+# Usuário 1 - Digite seu nome: >bberton
+# Usuário 2 - Digite seu nome: >estevao
+
+# Começando o jogo
+...
+...
+...
+
+o -> bberton
+x -> estevao
+
+# Usuário 1: qual casa (1-9)? 9
+
+...
+...
+..o
+
+# Usuário 2: qual casa (1-9)? 9
+
+# Casa já jogada
+
+# Usuário 2: qual casa (1-9)? 8
+
+...
+...
+.xo
+
+# Usuário 1: qual casa (1-9)? 5
+...
+.o.
+.xo
+
+# Usuário 2: qual casa (1-9)? 3
+..x
+.o.
+.xo
+
+# Usuário 1: qual casa (1-9)? 1
+o.x
+.o.
+.xo
+
+# Usuário 1 ganhou! 
+# uer jogar novamente? (y/n)
