@@ -11,7 +11,7 @@ import (
 var board = [][]string{{".", ".", "."}, {".", ".", "."}, {".", ".", "."}}
 
 func main() {
-	// fmt.Println("Hello, world.")
+	fmt.Println("Hello, world.")
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Usuário 1 - Digite seu nome:")
 	user1, _ := reader.ReadString('\n')
@@ -36,7 +36,19 @@ func main() {
 
 	printGameBoard()
 
-	fmt.Println(board[0][0])
+	// fmt.Println(board[0][0])
+
+	// fmt.Println(GetCoordinates(1))
+	// fmt.Println(GetCoordinates(2))
+	// fmt.Println(GetCoordinates(3))
+
+	// fmt.Println(GetCoordinates(4))
+	// fmt.Println(GetCoordinates(5))
+	// fmt.Println(GetCoordinates(6))
+
+	// fmt.Println(GetCoordinates(7))
+	// fmt.Println(GetCoordinates(8))
+	// fmt.Println(GetCoordinates(9))
 
 }
 
@@ -45,5 +57,9 @@ func printGameBoard() {
 }
 
 func GetCoordinates(input int) (int, int) {
-	return 1, 2
+	if input%3 == 0 {
+		return input/3 - 1, 2
+	}
+	return input / 3, input%3 - 1
+
 }

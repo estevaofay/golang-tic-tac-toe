@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 type coordinateTest struct {
 	arg1, expectedx, expectedy int
@@ -18,11 +22,10 @@ var coordinateTests = []coordinateTest{
 	{9, 2, 2},
 }
 
-func TestAdd(t *testing.T) {
-
+func TestCoordinates(t *testing.T) {
 	for _, test := range coordinateTests {
-		if outputX, outputY := GetCoordinates(test.arg1); outputX != test.expectedx && outputY != test.expectedy {
-			t.Errorf("Output %q not equal to expected %q and/or output %q not equal to expected output %q", outputX, test.expectedx, outputY, test.expectedy)
-		}
+		outputX, outputY := GetCoordinates(test.arg1)
+		assert.Equal(t, test.expectedx, outputX)
+		assert.Equal(t, test.expectedy, outputY)
 	}
 }
