@@ -1,4 +1,4 @@
-module github.com/golang-tic-tac-toe
+module tictactoe
 
 go 1.17
 

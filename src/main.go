@@ -9,123 +9,186 @@ import (
 	"strings"
 )
 
-var board = [][]string{{".", ".", "."}, {".", ".", "."}, {".", ".", "."}}
+type Player struct {
+	Name  string
+	Score int
+	Mark  rune
+}
+
+type Board struct {
+	Board      [][]rune
+	Player1    Player
+	Player2    Player
+	PlayerTurn int
+}
+
 var isUser1Turn = true
 
 func main() {
-	fmt.Println("Hello, world.")
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Usuário 1 - Digite seu nome:")
-	user1, _ := reader.ReadString('\n')
-	fmt.Println(user1)
 
-	fmt.Println("Usuário 2 - Digite seu nome:")
-	user2, _ := reader.ReadString('\n')
-	fmt.Println(user2)
+	fmt.Println("Welcome to tic-tac-toe!")
+	fmt.Println()
+	fmt.Println("Player 1 - Type your name:")
 
-	fmt.Println("Começando o jogo")
+	player1 := Player{
+		Name:  readName(),
+		Score: 0,
+		Mark:  'x',
+	}
 
-	fmt.Println("o ->", user1)
-	fmt.Println("x ->", user2)
+	fmt.Println()
+	fmt.Println("Player 2 - Type your name:")
+
+	player2 := Player{
+		Name:  readName(),
+		Score: 0,
+		Mark:  'o',
+	}
+
+	board := Board{
+		Board:      [][]rune{{'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'}},
+		Player1:    player1,
+		Player2:    player2,
+		PlayerTurn: 1,
+	}
+
+	fmt.Println("Starting game")
 
 	for {
-		clearScreen()
+		board.clearScreen()
+		board.printGameBoard()
+		userMoveInt := -1
 
-		fmt.Println("Usuário : qual casa (1-9)?")
-		printGameBoard()
+		if board.PlayerTurn == 1 {
+			fmt.Println(board.Player1.Name, "what is your next move? (1-9)")
+			userMove, _ := reader.ReadString('\n')
+			userMove = strings.ReplaceAll(userMove, "\n", "")
+			userMoveInt, _ = strconv.Atoi(userMove)
+			board.PlayerTurn = 2
+		} else {
+			fmt.Println(board.Player2.Name, "what is your next move? (1-9)")
+			userMove, _ := reader.ReadString('\n')
+			userMove = strings.ReplaceAll(userMove, "\n", "")
+			userMoveInt, _ = strconv.Atoi(userMove)
+			board.PlayerTurn = 1
+		}
 
-		userMove, _ := reader.ReadString('\n')
+		board.setMoveOnBoard(userMoveInt)
+		if board.isGameComplete() {
+			if board.PlayerTurn == 1 {
+				board.Player1.Score++
+			} else {
+				board.Player2.Score++
+			}
 
-		userMove = strings.ReplaceAll(userMove, "\n", "")
-		userMoveInt, _ := strconv.Atoi(userMove)
-		setMoveOnBoard(userMoveInt)
-		if checkGameCompletion() {
+			board.clearScreen()
+			board.printGameBoard()
+			board.printBoardScore()
 			break
 		}
 	}
-
 }
 
-func checkGameCompletion() bool {
-	return checkColumns() || checkRows() || checkDiagonals() || checkDrawGame()
+func readName() string {
+	reader := bufio.NewReader(os.Stdin)
+	name, _ := reader.ReadString('\n')
+	name = strings.ReplaceAll(name, "\n", "")
+	return name
 }
 
-func checkDrawGame() bool {
+func (b *Board) printBoardScore() {
+	b.Player1.printPlayerScore()
+	b.Player2.printPlayerScore()
+}
+
+func (p *Player) printPlayerScore() {
+	fmt.Printf("Player %s has a score of %d!\n", p.Name, p.Score)
+}
+
+func (b *Board) isGameComplete() bool {
+	return b.checkColumns() || b.checkRows() || b.checkDiagonals() || b.checkDrawGame()
+}
+
+func (b *Board) checkDrawGame() bool {
 	isDrawGame := true
-	for _, line := range board {
+	for _, line := range b.Board {
 		for _, value := range line {
-			isDrawGame = isDrawGame && !checkDot(value)
+			isDrawGame = isDrawGame && !b.checkDot(value)
 		}
 	}
 	return isDrawGame
 }
 
-func checkDiagonals() bool {
-	return checkFirstDiagonal() || checkSecondDiagonal()
+func (b *Board) checkDiagonals() bool {
+	return b.checkFirstDiagonal() || b.checkSecondDiagonal()
 }
 
-func checkFirstDiagonal() bool {
-	if checkDot(board[0][0]) || checkDot(board[1][1]) || checkDot(board[2][2]) {
+func (b *Board) checkFirstDiagonal() bool {
+	if b.checkDot(b.Board[0][0]) || b.checkDot(b.Board[1][1]) || b.checkDot(b.Board[2][2]) {
 		return false
 	}
-	return board[0][0] == board[1][1] && board[1][1] == board[2][2]
+	return b.Board[0][0] == b.Board[1][1] && b.Board[1][1] == b.Board[2][2]
 }
 
-func checkSecondDiagonal() bool {
-	if checkDot(board[0][2]) || checkDot(board[1][1]) || checkDot(board[2][0]) {
+func (b *Board) checkSecondDiagonal() bool {
+	if b.checkDot(b.Board[0][2]) || b.checkDot(b.Board[1][1]) || b.checkDot(b.Board[2][0]) {
 		return false
 	}
-	return board[0][2] == board[1][1] && board[1][1] == board[2][0]
+	return b.Board[0][2] == b.Board[1][1] && b.Board[1][1] == b.Board[2][0]
 }
 
-func checkRows() bool {
-	return checkRow(0) || checkRow(1) || checkRow(2)
+func (b *Board) checkRows() bool {
+	return b.checkRow(0) || b.checkRow(1) || b.checkRow(2)
 }
 
-func checkRow(index int) bool {
-	if checkDot(board[0][index]) || checkDot(board[1][index]) || checkDot(board[2][index]) {
+func (b *Board) checkRow(index int) bool {
+	if b.checkDot(b.Board[0][index]) || b.checkDot(b.Board[1][index]) || b.checkDot(b.Board[2][index]) {
 		return false
 	}
-	return board[0][index] == board[1][index] && board[1][index] == board[2][index]
+	return b.Board[0][index] == b.Board[1][index] && b.Board[1][index] == b.Board[2][index]
 }
 
-func checkColumns() bool {
-	return checkColumn(0) || checkColumn(1) || checkColumn(2)
+func (b *Board) checkColumns() bool {
+	return b.checkColumn(0) || b.checkColumn(1) || b.checkColumn(2)
 }
 
-func checkColumn(index int) bool {
-	if checkDot(board[index][0]) || checkDot(board[index][1]) || checkDot(board[index][2]) {
+func (b *Board) checkColumn(index int) bool {
+	if b.checkDot(b.Board[index][0]) || b.checkDot(b.Board[index][1]) || b.checkDot(b.Board[index][2]) {
 		return false
 	}
-	return board[index][0] == board[index][1] && board[index][1] == board[index][2]
+	return b.Board[index][0] == b.Board[index][1] && b.Board[index][1] == b.Board[index][2]
 }
 
-func checkDot(value string) bool {
-	return value == "."
+func (b *Board) checkDot(value rune) bool {
+	return value == '.'
 }
 
-func setMoveOnBoard(userMove int) {
+func (b *Board) setMoveOnBoard(userMove int) {
 	x, y := GetCoordinates(userMove)
 	if isUser1Turn {
-		board[x][y] = "o"
+		b.Board[x][y] = 'o'
 	} else {
-		board[x][y] = "x"
+		b.Board[x][y] = 'x'
 	}
 	isUser1Turn = !isUser1Turn
 }
 
-func printGameBoard() {
-	for _, line := range board {
+func (b *Board) printGameBoard() {
+	fmt.Println("Board:")
+	fmt.Println()
+	for _, line := range b.Board {
 		fmt.Print("|")
 		for _, value := range line {
-			fmt.Print(value)
+			fmt.Print(string(value))
 		}
 		fmt.Println("|")
 	}
 
+	fmt.Println()
 }
 
-func clearScreen() {
+func (b *Board) clearScreen() {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
