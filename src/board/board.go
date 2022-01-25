@@ -186,9 +186,5 @@ func (b *Board) clearScreen() {
 }
 
 func GetCoordinates(input int) (int, int) {
-	if input%3 == 0 {
-		return input/3 - 1, 2
-	}
-	return input / 3, input%3 - 1
-
+	return (input - 1) / 3, (input - 1) % 3
 }
