@@ -80,9 +80,22 @@ func PlayTheGame() {
 			board.clearScreen()
 			board.printGameBoard()
 			board.printBoardScore()
-			break
+			fmt.Println("Do you wish play another round? (y/n)")
+			continuePlaying, _ := reader.ReadString('\n')
+			continuePlaying = strings.ReplaceAll(continuePlaying, "\n", "")
+			if continuePlaying == "n" {
+				break
+			} else {
+				board.clearScreen()
+				board.clearBoard()
+
+			}
 		}
 	}
+}
+
+func (b *Board) clearBoard() {
+	b.Board = [][]rune{{'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'}}
 }
 
 func readName() string {
