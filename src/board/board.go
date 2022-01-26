@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strconv"
 	"strings"
 	"tictactoe/player"
 )
@@ -18,9 +17,9 @@ type Board struct {
 }
 
 var isUser1Turn = true
+var reader = bufio.NewReader(os.Stdin)
 
 func PlayTheGame() {
-	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Println("Welcome to tic-tac-toe!")
 	fmt.Println()
@@ -56,25 +55,21 @@ func PlayTheGame() {
 		userMoveInt := -1
 
 		if board.PlayerTurn == 1 {
-			fmt.Println(board.Player1.Name, "what is your next move? (1-9)")
-			userMove, _ := reader.ReadString('\n')
-			userMove = strings.ReplaceAll(userMove, "\n", "")
-			userMoveInt, _ = strconv.Atoi(userMove)
+			userMoveInt = board.Player1.GetPlayerMove()
 			board.PlayerTurn = 2
 		} else {
-			fmt.Println(board.Player2.Name, "what is your next move? (1-9)")
-			userMove, _ := reader.ReadString('\n')
-			userMove = strings.ReplaceAll(userMove, "\n", "")
-			userMoveInt, _ = strconv.Atoi(userMove)
+			userMoveInt = board.Player2.GetPlayerMove()
 			board.PlayerTurn = 1
 		}
 
 		board.setMoveOnBoard(userMoveInt)
 		if board.isGameComplete() {
-			if board.PlayerTurn == 1 {
-				board.Player1.Score++
-			} else {
-				board.Player2.Score++
+			if !board.checkDrawGame() {
+				if board.PlayerTurn == 1 {
+					board.Player2.Score++
+				} else {
+					board.Player1.Score++
+				}
 			}
 
 			board.clearScreen()
