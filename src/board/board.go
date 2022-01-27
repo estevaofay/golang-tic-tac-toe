@@ -6,14 +6,10 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"tictactoe/player"
 )
 
 type Board struct {
-	Board      [][]rune
-	Player1    player.Player
-	Player2    player.Player
-	PlayerTurn int
+	// Define board struct here
 }
 
 var isUser1Turn = true
@@ -25,31 +21,18 @@ func PlayTheGame() {
 	fmt.Println()
 	fmt.Println("Player 1 - Type your name:")
 
-	player1 := player.Player{
-		Name:  readName(),
-		Score: 0,
-		Mark:  'x',
-	}
+	// Initialize player 1 here
 
 	fmt.Println()
 	fmt.Println("Player 2 - Type your name:")
 
-	player2 := player.Player{
-		Name:  readName(),
-		Score: 0,
-		Mark:  'o',
-	}
+	// Initialize player 2 here
 
-	board := Board{
-		Board:      [][]rune{{'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'}},
-		Player1:    player1,
-		Player2:    player2,
-		PlayerTurn: 1,
-	}
+	// Initialize board here
 
 	fmt.Println("Starting game")
 
-	for {
+	for { // game loop, break when 'n'
 		board.clearScreen()
 		board.printGameBoard()
 		userMoveInt := -1
@@ -90,14 +73,11 @@ func PlayTheGame() {
 }
 
 func (b *Board) clearBoard() {
-	b.Board = [][]rune{{'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'}}
+	// Given a board, set it to '.' in all fields
 }
 
 func readName() string {
-	reader := bufio.NewReader(os.Stdin)
-	name, _ := reader.ReadString('\n')
-	name = strings.ReplaceAll(name, "\n", "")
-	return name
+	// Read player name from std in
 }
 
 func (b *Board) printBoardScore() {
@@ -174,17 +154,7 @@ func (b *Board) setMoveOnBoard(userMove int) {
 }
 
 func (b *Board) printGameBoard() {
-	fmt.Println("Board:")
-	fmt.Println()
-	for _, line := range b.Board {
-		fmt.Print("|")
-		for _, value := range line {
-			fmt.Print(string(value))
-		}
-		fmt.Println("|")
-	}
-
-	fmt.Println()
+	// Print current state of the board
 }
 
 func (b *Board) clearScreen() {
@@ -194,5 +164,5 @@ func (b *Board) clearScreen() {
 }
 
 func GetCoordinates(input int) (int, int) {
-	return (input - 1) / 3, (input - 1) % 3
+	// Make unit tests pass for all cases
 }
