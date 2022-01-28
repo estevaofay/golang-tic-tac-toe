@@ -194,10 +194,9 @@ func (b *Board) setMoveOnBoard(userMove int) {
 
 func (b *Board) printGameBoard() {
 	// Print current state of the board
-	//for _, dog := range dogs
 	for _, line := range b.Board {
 		for _, column := range line {
-			fmt.Print(column)
+			fmt.Print(string(column))
 		}
 		fmt.Println()
 	}
