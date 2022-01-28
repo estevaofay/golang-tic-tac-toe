@@ -6,10 +6,15 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"tictactoe/player"
 )
 
 type Board struct {
 	// Define board struct here
+	Board      [][]rune
+	Player1    player.Player
+	Player2    player.Player
+	PlayerTurn int
 }
 
 var isUser1Turn = true
@@ -22,13 +27,33 @@ func PlayTheGame() {
 	fmt.Println("Player 1 - Type your name:")
 
 	// Initialize player 1 here
+	var player1 = player.Player{
+		Name: readName(), Score: 0, Mark: 'o',
+	}
 
 	fmt.Println()
 	fmt.Println("Player 2 - Type your name:")
 
 	// Initialize player 2 here
+	var player2 = player.Player{
+		Name: readName(), Score: 0, Mark: 'x',
+	}
 
 	// Initialize board here
+	board := Board{
+		Board: [][]rune{
+			{
+				'.', '.', '.',
+			},
+			{
+				'.', '.', '.',
+			},
+			{
+				'.', '.', '.',
+			},
+		},
+		Player1: player1, Player2: player2, PlayerTurn: 1,
+	}
 
 	fmt.Println("Starting game")
 

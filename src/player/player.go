@@ -17,20 +17,27 @@ type Player struct {
 }
 
 func (p *Player) GetPlayerMove() int {
-	fmt.Printf("%s what is your next move? (1-9):\n", p.Name)
 
-	// Get player Move from Stdin
-	text, _ := reader.ReadString('\n')
-	text = strings.ReplaceAll(text, "\n", "")
+	var userMoveInt int
 
-	// Check if move is valid
-	userMoveInt, _ := strconv.Atoi(text)
+	for {
+		fmt.Printf("%s what is your next move? (1-9):\n", p.Name)
 
-	// userMoveInt := 0
-	if userMoveInt < 1 || userMoveInt > 9 {
-		fmt.Println("Please insert a number between 1 and 9")
+		// Get player Move from Stdin
+		text, _ := reader.ReadString('\n')
+		text = strings.ReplaceAll(text, "\n", "")
+
+		// Check if move is valid
+		userMoveInt, _ = strconv.Atoi(text)
+
+		// userMoveInt := 0
+		if userMoveInt < 1 || userMoveInt > 9 {
+			fmt.Println("Please insert a number between 1 and 9")
+		} else {
+			break
+		}
 	}
-
+	return userMoveInt
 }
 
 func (p *Player) PrintPlayerScore() {
