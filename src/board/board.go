@@ -99,10 +99,24 @@ func PlayTheGame() {
 
 func (b *Board) clearBoard() {
 	// Given a board, set it to '.' in all fields
+	b.Board = [][]rune{
+		{
+			'.', '.', '.',
+		},
+		{
+			'.', '.', '.',
+		},
+		{
+			'.', '.', '.',
+		},
+	}
 }
 
 func readName() string {
 	// Read player name from std in
+	name, _ := reader.ReadString('\n')
+	name = strings.ReplaceAll(name, "\n", "")
+	return name
 }
 
 func (b *Board) printBoardScore() {
@@ -180,6 +194,13 @@ func (b *Board) setMoveOnBoard(userMove int) {
 
 func (b *Board) printGameBoard() {
 	// Print current state of the board
+	//for _, dog := range dogs
+	for _, line := range b.Board {
+		for _, column := range line {
+			fmt.Print(column)
+		}
+		fmt.Println()
+	}
 }
 
 func (b *Board) clearScreen() {
