@@ -211,4 +211,5 @@ func (b *Board) clearScreen() {
 
 func GetCoordinates(input int) (int, int) {
 	// Make unit tests pass for all cases
+	return (input - 1) / 3, (input - 1) % 3
 }
